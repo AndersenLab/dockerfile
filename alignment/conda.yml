@@ -1,4 +1,4 @@
-name: concordance-nf
+name: alignment-nf
 channels:
   - defaults
   - bioconda
