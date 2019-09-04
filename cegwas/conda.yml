@@ -1,0 +1,28 @@
+name: concordance-nf
+channels:
+  - defaults
+  - bioconda
+  - r
+  - biobuilds
+  - conda-forge
+dependencies:
+  - bwa=0.7.17
+  - tabix=0.2.6
+  - wget=1.20.1
+  - sambamba=0.7.0
+  - samtools=1.9
+  - picard=2.20.6
+  - plink=1.90b4
+  - bcftools=1.9
+  - csvtk=0.18.2
+  - rvtests=2.0.7
+  - r=3.6.0
+  - r-data.table=1.12.2
+  - r-ggplot2=3.1.1
+  - r-readr=1.3.1
+  - r-rcpp=1.0.1
+  - r-rspectra=0.15_0
+  - r-tidyverse=1.2.1
+  - r-rrblup=4.6
+  - r-ggbeeswarm=0.6.0
+  - r-devtools=2.0.2
