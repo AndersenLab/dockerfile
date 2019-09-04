@@ -1,4 +1,4 @@
-name: concordance-nf
+name: cegwas2-nf
 channels:
   - defaults
   - bioconda
