@@ -5,5 +5,5 @@ COPY conda.yml .
 RUN \
    conda env update -n root -f conda.yml \
 && conda clean -a
-
+RUN apt-get install -y procps
 RUN R -e "install.packages('roperators',dependencies=TRUE, repos='http://cran.us.r-project.org')"
