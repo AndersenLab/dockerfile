@@ -19,4 +19,5 @@ ENV NXF_VER=21.05.0-edge \
   NXF_MODE=google \
   NXF_EDGE=1
 
-
+COPY nemarun.sh ./
+RUN chmod +x ./nemarun.sh
