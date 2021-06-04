@@ -2,8 +2,6 @@ FROM google/cloud-sdk:slim
 
 LABEL Name="nemarun" Author="Sam Wachspress"
 
-ARG version_id="5a56d4913423fe014ec15c1703a59b2e55f40efe"
-
 ENV NXF_VER=21.05.0-edge \
   NXF_MODE=google \
   NXF_EDGE=1
