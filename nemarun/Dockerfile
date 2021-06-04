@@ -1,12 +1,11 @@
 FROM google/cloud-sdk:slim
 
-LABEL Name="nemarun" Author="Sam Wachspress"
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends openjdk-11-jre wget
 
+LABEL Name="nemarun" Author="Sam Wachspress"
 ENV NXF_VER=21.05.0-edge \
   NXF_MODE=google \
   NXF_EDGE=1
-
-RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends openjdk-11-jre wget
 
 WORKDIR /nemarun
 # force version here
