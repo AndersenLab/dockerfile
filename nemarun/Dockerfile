@@ -2,7 +2,7 @@ FROM google/cloud-sdk:slim
 
 LABEL Name="nemarun" Author="Sam Wachspress"
 
-ARG version_id="bca4cb45a154e261912531fd901e146942e60e8c"
+ARG version_id="5a56d4913423fe014ec15c1703a59b2e55f40efe"
 
 ENV NXF_VER=21.05.0-edge \
   NXF_MODE=google \
@@ -15,7 +15,7 @@ WORKDIR /nemarun
 RUN NXF_VER=21.05.0-edge NXF_MODE=google NXF_EDGE=1 \
     wget -qO- https://get.nextflow.io | bash
 # add nextflow directory to path
-ENV PATH="/nemascan:${PATH}"
+ENV PATH="/nemarun:${PATH}"
 
 # Fetch Pipeline Files
 RUN wget https://raw.githubusercontent.com/northwestern-mti/NemaScan/${version_id}/src/gcp.nf \
