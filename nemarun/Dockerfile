@@ -33,4 +33,4 @@ RUN wget https://raw.githubusercontent.com/northwestern-mti/NemaScan/${version_i
 WORKDIR /nemarun
 
 COPY nemarun.sh ./
-RUN chmod +x ./nemarun.sh
+RUN chmod +x ./nemarun.sh ./nextflow
