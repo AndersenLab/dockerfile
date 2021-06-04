@@ -17,19 +17,6 @@ RUN NXF_VER=21.05.0-edge NXF_MODE=google NXF_EDGE=1 \
 # add nextflow directory to path
 ENV PATH="/nemarun:${PATH}"
 
-# Fetch Pipeline Files
-RUN wget https://raw.githubusercontent.com/northwestern-mti/NemaScan/${version_id}/src/gcp.nf \
-         https://raw.githubusercontent.com/northwestern-mti/NemaScan/${version_id}/src/nextflow.config
-
-# Fetch Pipeline Config Files
-WORKDIR /nemarun/conf
-RUN wget https://raw.githubusercontent.com/northwestern-mti/NemaScan/${version_id}/src/conf/annotations.config \
-         https://raw.githubusercontent.com/northwestern-mti/NemaScan/${version_id}/src/conf/gcp.config \
-         https://raw.githubusercontent.com/northwestern-mti/NemaScan/${version_id}/src/conf/mappings.config \
-         https://raw.githubusercontent.com/northwestern-mti/NemaScan/${version_id}/src/conf/mappings_docker.config \
-         https://raw.githubusercontent.com/northwestern-mti/NemaScan/${version_id}/src/conf/simulations.config
-
-
 WORKDIR /nemarun
 
 COPY nemarun.sh ./
