@@ -1,9 +1,10 @@
 #!/bin/bash
 if [ -n "${2}" ] #pipeline version passed as argument, download that version
   then
-    rm -rf ./gcp.nf ./nextflow.config
-    rm -rf ./conf
-    mkdir conf
+    rm -rf /nemarun/gcp.nf /nemarun/nextflow.config
+    rm -rf /nemarun/conf
+    mkdir /nemarun/conf
+    cd /nemarun
     # Fetch Pipeline Files
     wget https://raw.githubusercontent.com/northwestern-mti/NemaScan/${2}/src/gcp.nf \
         https://raw.githubusercontent.com/northwestern-mti/NemaScan/${2}/src/nextflow.config
