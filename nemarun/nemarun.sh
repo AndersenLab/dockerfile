@@ -11,16 +11,16 @@ rm -rf /nemarun/conf
 mkdir /nemarun/conf
 cd /nemarun
 # Fetch Pipeline Files
-wget https://raw.githubusercontent.com/northwestern-mti/NemaScan/${2}/src/gcp.nf \
-    https://raw.githubusercontent.com/northwestern-mti/NemaScan/${2}/src/nextflow.config
+wget https://raw.githubusercontent.com/northwestern-mti/NemaScan/${VERSION}/src/gcp.nf \
+    https://raw.githubusercontent.com/northwestern-mti/NemaScan/${VERSION}/src/nextflow.config
 
 # Fetch Pipeline Config Files
 cd conf
-wget https://raw.githubusercontent.com/northwestern-mti/NemaScan/${2}/src/conf/annotations.config \
-    https://raw.githubusercontent.com/northwestern-mti/NemaScan/${2}/src/conf/gcp.config \
-    https://raw.githubusercontent.com/northwestern-mti/NemaScan/${2}/src/conf/mappings.config \
-    https://raw.githubusercontent.com/northwestern-mti/NemaScan/${2}/src/conf/mappings_docker.config \
-    https://raw.githubusercontent.com/northwestern-mti/NemaScan/${2}/src/conf/simulations.config
+wget https://raw.githubusercontent.com/northwestern-mti/NemaScan/${VERSION}/src/conf/annotations.config \
+    https://raw.githubusercontent.com/northwestern-mti/NemaScan/${VERSION}/src/conf/gcp.config \
+    https://raw.githubusercontent.com/northwestern-mti/NemaScan/${VERSION}/src/conf/mappings.config \
+    https://raw.githubusercontent.com/northwestern-mti/NemaScan/${VERSION}/src/conf/mappings_docker.config \
+    https://raw.githubusercontent.com/northwestern-mti/NemaScan/${VERSION}/src/conf/simulations.config
   
 
 
