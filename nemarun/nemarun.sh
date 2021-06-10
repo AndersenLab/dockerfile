@@ -3,7 +3,7 @@ if [ -n "${2}" ] #pipeline version passed as argument, download that version, ot
   then 
     VERSION="${2}"
   else
-    VERSION="cendr-dev"
+    VERSION="cendr_dev"
 fi
 
 rm -rf /nemarun/gcp.nf /nemarun/nextflow.config
