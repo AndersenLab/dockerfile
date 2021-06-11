@@ -1,28 +1,21 @@
 #!/bin/bash
-if [ -n "${2}" ] #pipeline version passed as argument, download that version, otherwise download latest
-  then 
-    VERSION="${2}"
-  else
-    VERSION="cendr_dev"
-fi
-
-rm -rf /nemarun/gcp.nf /nemarun/nextflow.config
-rm -rf /nemarun/conf
-mkdir /nemarun/conf
-cd /nemarun
-# Fetch Pipeline Files
-wget https://raw.githubusercontent.com/northwestern-mti/NemaScan/${VERSION}/src/gcp.nf \
-    https://raw.githubusercontent.com/northwestern-mti/NemaScan/${VERSION}/src/nextflow.config
-
-# Fetch Pipeline Config Files
-cd conf
-wget https://raw.githubusercontent.com/northwestern-mti/NemaScan/${VERSION}/src/conf/annotations.config \
-    https://raw.githubusercontent.com/northwestern-mti/NemaScan/${VERSION}/src/conf/gcp.config \
-    https://raw.githubusercontent.com/northwestern-mti/NemaScan/${VERSION}/src/conf/mappings.config \
-    https://raw.githubusercontent.com/northwestern-mti/NemaScan/${VERSION}/src/conf/mappings_docker.config \
-    https://raw.githubusercontent.com/northwestern-mti/NemaScan/${VERSION}/src/conf/simulations.config
-  
-
-
-cd /nemarun
-/nemarun/nextflow run ./gcp.nf -profile gcp --trait_file ${1}/data.tsv --out ${1}/results
+#
+# This script acts as a wrapper around the execution of Nextflow to convert ordered
+#   arguments into named parameters
+#
+#       Arg 1: Report ID
+#       Arg 2: Google Storage data/report root path directory (cannot just be a bucket, it must be a subdirectory within a bucket) 
+#               eg: "gs://bucket1/nemascan/reports"
+#       Arg 3: Google Storage work root path directory (cannot just be a bucket, it must be a subdirectory within a bucket) 
+#               eg: "gs://bucket2/workdir"
+#
+#
+#   example: 'nemarun.sh d37a6511ac5170d3bf7d31d17ba872e0 gs://elegansvariation.org/reports/nemascan gs://nf-pipelines/workdir'
+#   result: nextflow run ./gcp.nf 
+#                   -profile gcp 
+#                   --trait_file gs://elegansvariation.org/reports/nemascan/d37a6511ac5170d3bf7d31d17ba872e0/data.tsv 
+#                   --out gs://elegansvariation.org/reports/nemascan/d37a6511ac5170d3bf7d31d17ba872e0/results
+#                   --workDir gs://nf-pipelines/workdir/d37a6511ac5170d3bf7d31d17ba872e0
+#   
+#
+nextflow run ./gcp.nf -profile gcp --trait_file ${2}/${1}/data.tsv --out ${2}/${1}/results --workDir ${3}/${1}

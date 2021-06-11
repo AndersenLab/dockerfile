@@ -7,14 +7,14 @@ ENV NXF_VER=21.05.0-edge \
   NXF_MODE=google \
   NXF_EDGE=1
 
-WORKDIR /nemarun
 # force version here
+WORKDIR /nemarun
 RUN NXF_VER=21.05.0-edge NXF_MODE=google NXF_EDGE=1 \
     wget -qO- https://get.nextflow.io | bash
-# add nextflow directory to path
+COPY nemarun.sh /nemarun/nemarun.sh
+
+# add nextflow and nemarun directory to te system path and make them executable
 ENV PATH="/nemarun:${PATH}"
+RUN chmod +x /nemarun/nemarun.sh /nemarun/nextflow
 
 WORKDIR /nemarun
-
-COPY nemarun.sh ./
-RUN chmod +x ./nemarun.sh ./nextflow
