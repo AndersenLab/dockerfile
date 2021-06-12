@@ -655,8 +655,6 @@ process gcta_lmm_exact_mapping {
     publishDir "${params.out}/Mapping/Raw", pattern: "*fastGWA", overwrite: true
     publishDir "${params.out}/Mapping/Raw", pattern: "*loco.mlma", overwrite: true
 
-    errorStrategy 'ignore'
-
     input:
     tuple val(TRAIT), file(traits), file(bed), file(bim), file(fam), file(map), \
     file(nosex), file(ped), file(log), file(grm_bin), file(grm_id), file(grm_nbin), \
@@ -882,9 +880,6 @@ process gcta_fine_maps {
     publishDir "${params.out}/Fine_Mappings/Data", mode: 'copy', pattern: "*.fastGWA"
     publishDir "${params.out}/Fine_Mappings/Data", mode: 'copy', pattern: "*_genes.tsv"
     publishDir "${params.out}/Fine_Mappings/Plots", mode: 'copy', pattern: "*.pdf"
-
-    
-    //errorStrategy 'ignore'
 
     input:
         tuple val(TRAIT), file(pheno), file(ROI_geno), file(ROI_LD), file(bim), file(bed), file(fam), file(annotation), file(genefile), file(finemap_qtl_intervals), file(plot_genes)
@@ -1477,9 +1472,23 @@ process sim_fine_maps {
 =====================================
 */
 
+workflow.onError {
+
+  summary = """
+
+    Pipeline Error Message
+    ---------------------------
+    ${workflow.errorMessage}
+
+  """
+
+  println summary
+
+}
+
 workflow.onComplete {
 
-    summary = """
+  summary = """
 
     Pipeline execution summary
     ---------------------------
@@ -1511,8 +1520,7 @@ workflow.onComplete {
     Annotation                              = ${params.annotate}
     Result Directory                        = ${params.out}
 
-    """
+  """
 
-    println summary
-
+  println summary
 }
