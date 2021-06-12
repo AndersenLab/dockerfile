@@ -8,8 +8,6 @@ if( !nextflow.version.matches('21.05.0-edge+') ) {
 
 nextflow.enable.dsl=2
 
-date = new Date().format( 'yyyyMMdd' )
-
 if(params.debug) {
     println """
         *** Using debug mode ***

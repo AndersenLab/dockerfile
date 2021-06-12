@@ -18,4 +18,4 @@
 #                   --workDir gs://nf-pipelines/workdir/d37a6511ac5170d3bf7d31d17ba872e0
 #   
 #
-nextflow run gcp.nf -profile gcp --trait_file ${2}/${1}/data.tsv --out ${2}/${1}/results --workDir ${3}/${1}
+nextflow run gcp.nf -profile gcp --trait_file ${2}/${1}/data.tsv --out ${2}/${1}/results --work_dir ${3}/${1}
