@@ -1,6 +1,6 @@
 FROM google/cloud-sdk:slim
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends openjdk-11-jre wget
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends openjdk-11-jre wget procps
 
 LABEL Name="nemarun" Author="Sam Wachspress"
 ENV NXF_VER=21.05.0-edge \
