@@ -28,4 +28,5 @@ dependencies:
   - r-coop=0.6-2
   - r-Rcpp=1.0.1
   - r-cowplot=1.0.0
+  - mscorefonts
 #  - bioconductor-ComplexHeatmap=2.4.2
