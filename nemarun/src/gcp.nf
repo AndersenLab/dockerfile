@@ -253,16 +253,16 @@ workflow {
          // generate html report - on gcp
         peaks // QTL peaks (all traits)
             .combine(traits_to_map) // trait names
+            .combine(Channel.fromPath("${params.bin_dir}/NemaScan_Report_main.Rmd"))
+            .combine(Channel.fromPath("${params.bin_dir}/NemaScan_Report_region_template.Rmd"))
+            .combine(Channel.fromPath("${params.bin_dir}/render_markdown.R"))
             .combine(fix_strain_names_bulk.out.strain_issues) // strain issues file
             .combine(collect_eigen_variants.out) // independent tests
             .combine(vcf_to_geno_matrix.out) // genotype matrix
             .combine(divergent_and_haplotype.out.div_hap_table) // divergent and haplotype out
             .join(gcta_intervals_maps.out.for_html, by: 1) // processed mapping data
             .join(gcta_fine_maps.out.finemap_html, remainder: true) // fine mapping data 
-            .join(prep_ld_files.out.finemap_LD, remainder: true)
-            .combine(Channel.fromPath("${params.bin_dir}/NemaScan_Report_main.Rmd"))
-            .combine(Channel.fromPath("${params.bin_dir}/NemaScan_Report_region_template.Rmd"))
-            .combine(Channel.fromPath("${params.bin_dir}/render_markdown.R")) | html_report_main // more finemap data prep
+            .join(prep_ld_files.out.finemap_LD, remainder: true) | html_report_main // more finemap data prep
 
     } else if(params.annotate) {
 
@@ -973,37 +973,40 @@ process html_report_main {
 
   machineType 'n1-highmem-2'
 
-  publishDir "${params.out}/Reports", pattern: "*.Rmd", overwrite: true
-  publishDir "${params.out}/Reports", pattern: "*.html", overwrite: true
+  publishDir "${params.out}/Reports", mode:'copy', pattern: "*.Rmd"
+  publishDir "${params.out}/Reports", mode:'copy', pattern: "*.html"
 
   input:
-    tuple val(TRAIT), file(qtl_peaks), file(pheno), file(strain_issues), file(tests), file(geno), file(qtl_bins), file(qtl_div), \
-    file(haplotype_qtl), file(div_isotype), file(pmap), file(fastGWA), file(prLD), file(bcsq_genes), file(roi_geno), file(roi_ld), \
-    file(ns_report_md), file(ns_report_template_md), file(render_markdown)
+    tuple val(TRAIT), file(ns_report_md), file(ns_report_template_md), file(render_markdown), file(qtl_peaks), file(pheno), \
+    file(strain_issues), file(tests), file(geno), file(qtl_bins), file(qtl_div), file(haplotype_qtl), file(div_isotype), \
+    file(pmap), file(fastGWA), file(prLD), file(bcsq_genes), file(roi_geno), file(roi_ld)
+    
 
   output:
     tuple file("NemaScan_Report_*.Rmd"), file("NemaScan_Report_*.html")
 
 
   """
+
     # edit the file paths for generating these reports
     cat ${ns_report_md} | \\
-    sed "s+TRAIT_NAME_HOLDER+${TRAIT}+g" | \\
-    sed "s+Phenotypes/strain_issues.txt+${strain_issues}+g" | \\
-    sed "s+Genotype_Matrix/total_independent_tests.txt+${tests}+g" | \\
-    sed 's+paste0("Mapping/Processed/processed_",trait_name,"_AGGREGATE_mapping.tsv")+"${pmap}"+g' | \\
-    sed "s+Mapping/Processed/QTL_peaks.tsv+${qtl_peaks}+g" | \\
-    sed "s+Genotype_Matrix/Genotype_Matrix.tsv+${geno}+g" | \\
-    sed "s+NemaScan_Report_region_template.Rmd+NemaScan_Report_region_${TRAIT}.Rmd+g" > NemaScan_Report_${TRAIT}_main.Rmd
-    cat "${ns_report_template_md}" | \\
-    sed 's+glue::glue("Fine_Mappings/Data/{trait_name}_{QTL_chrom}_{QTL_start}-{QTL_end}_bcsq_genes.tsv")+"${bcsq_genes}"+g' | \\
-    sed 's+glue::glue("Fine_Mappings/Data/{trait_name}.{QTL_chrom}:{QTL_start}-{QTL_end}.ROI_Genotype_Matrix.tsv")+"${roi_geno}"+g' | \\
-    sed 's+glue::glue("Fine_Mappings/Data/{trait_name}.{QTL_chrom}.{QTL_start}.{QTL_end}.LD.tsv")+"${roi_ld}"+g' | \\
-    sed 's+glue::glue("Fine_Mappings/Data/{trait_name}.{QTL_chrom}.{QTL_start}.{QTL_end}.finemap_inbred.fastGWA")+"${fastGWA}"+g' | \\
-    sed "s+Divergent_and_haplotype/div_isotype_list.txt+${div_isotype}+g" | \\
-    sed "s+Divergent_and_haplotype/all_QTL_bins.bed+${qtl_bins}+g" | \\
-    sed "s+Divergent_and_haplotype/all_QTL_div.bed+${qtl_div}+g" | \\
-    sed "s+Divergent_and_haplotype/haplotype_in_QTL_region.txt+${haplotype_qtl}+g" > NemaScan_Report_region_${TRAIT}.Rmd
+    sed "s/TRAIT_NAME_HOLDER/${TRAIT}/g" | \\
+    sed "s/Phenotypes\/strain_issues\.txt/${strain_issues}/g" | \\
+    sed "s/Genotype_Matrix\/total_independent_tests\.txt/${tests}/g" | \\
+    sed "s/paste0\(\"Mapping\/Processed\/processed_\",trait_name,\"_AGGREGATE_mapping\.tsv\"\)/${pmap}/g" | \\
+    sed "s/Mapping\/Processed\/QTL_peaks\.tsv/${qtl_peaks}/g" | \\
+    sed "s/Genotype_Matrix\/Genotype_Matrix\.tsv/${geno}/g" | \\
+    sed "s/NemaScan_Report_region_template\.Rmd/NemaScan_Report_region_${TRAIT}.Rmd/g" > NemaScan_Report_${TRAIT}_main.Rmd
+
+    cat ${ns_report_template_md} | \\ 
+    sed "s/glue::glue\(\"Fine_Mappings\/Data\/\{trait_name\}_\{QTL_chrom\}_\{QTL_start\}-\{QTL_end\}_bcsq_genes\.tsv\"\)/\"${bcsq_genes}\"/g" | \\
+    sed "s/glue::glue\(\"Fine_Mappings\/Data\/\{trait_name\}\.\{QTL_chrom\}:\{QTL_start\}-\{QTL_end\}\.ROI_Genotype_Matrix\.tsv\"\)/\"${roi_geno}\"/g" | \\
+    sed "s/glue::glue\(\"Fine_Mappings\/Data\/\{trait_name\}\.\{QTL_chrom\}\.\{QTL_start\}\.\{QTL_end\}\.LD\.tsv\"\)/\"${roi_ld}\"/g" | \\
+    sed "s/glue::glue\(\"Fine_Mappings\/Data\/\{trait_name\}\.\{QTL_chrom\}\.\{QTL_start\}\.\{QTL_end\}\.finemap_inbred\.fastGWA\"\)/\"${fastGWA}\"/g" | \\
+    sed "s/Divergent_and_haplotype\/div_isotype_list\.txt/${div_isotype}/g" | \\
+    sed "s/Divergent_and_haplotype\/all_QTL_bins\.bed/${qtl_bins}/g" | \\
+    sed "s/Divergent_and_haplotype\/all_QTL_div\.bed/${qtl_div}/g" | \\
+    sed "s/Divergent_and_haplotype\/haplotype_in_QTL_region\.txt/${haplotype_qtl}/g" > NemaScan_Report_region_${TRAIT}.Rmd
 
     Rscript --vanilla ${render_markdown} NemaScan_Report_${TRAIT}_main.Rmd
 
