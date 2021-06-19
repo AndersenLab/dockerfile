@@ -249,20 +249,19 @@ workflow {
             .combine(Channel.fromPath("${params.data_dir}/isotypes/haplotype_df_isotype.bed"))
             .combine(Channel.fromPath("${params.data_dir}/isotypes/div_isotype_list.txt")) | divergent_and_haplotype
 
-        // generate main html report
-         // generate html report - on gcp
         peaks // QTL peaks (all traits)
             .combine(traits_to_map) // trait names
             .combine(fix_strain_names_bulk.out.strain_issues) // strain issues file
             .combine(collect_eigen_variants.out) // independent tests
             .combine(vcf_to_geno_matrix.out) // genotype matrix
-            .combine(divergent_and_haplotype.out.div_hap_table) // divergent and haplotype out
-            .join(gcta_intervals_maps.out.for_html, by: 1) // processed mapping data
-            .join(gcta_fine_maps.out.finemap_html, remainder: true) // fine mapping data 
-            .join(prep_ld_files.out.finemap_LD, remainder: true)
+            .combine(divergent_and_haplotype.out.div_hap_table)
             .combine(Channel.fromPath("${params.bin_dir}/NemaScan_Report_main.Rmd"))
             .combine(Channel.fromPath("${params.bin_dir}/NemaScan_Report_region_template.Rmd"))
-            .combine(Channel.fromPath("${params.bin_dir}/render_markdown.R")) | html_report_main // more finemap data prep
+            .combine(Channel.fromPath("${params.bin_dir}/render_markdown.R")) 
+            .join(gcta_intervals_maps.out.for_html, by: 1) // processed mapping data
+            .join(gcta_fine_maps.out.finemap_html, remainder: true) // fine mapping data
+            .join(prep_ld_files.out.finemap_LD, remainder: true) | html_report_main // more finemap data prep
+
 
     } else if(params.annotate) {
 
@@ -978,9 +977,9 @@ process html_report_main {
 
   input:
     tuple val(TRAIT), file(qtl_peaks), file(pheno), file(strain_issues), file(tests), file(geno), file(qtl_bins), file(qtl_div), \
-    file(haplotype_qtl), file(div_isotype), file(pmap), file(fastGWA), file(prLD), file(bcsq_genes), file(roi_geno), file(roi_ld), \
-    file(ns_report_md), file(ns_report_template_md), file(render_markdown)
-
+    file(haplotype_qtl), file(div_isotype), file(ns_report_md), file(ns_report_template_md), file(render_markdown), file(pmap), \
+    file(fastGWA), file(prLD), file(bcsq_genes), file(roi_geno), file(roi_ld)
+    
   output:
     tuple file("NemaScan_Report_*.Rmd"), file("NemaScan_Report_*.html")
 

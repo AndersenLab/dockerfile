@@ -1,16 +1,7 @@
 #!/bin/bash
 #
-# This script acts as a wrapper around the execution of Nextflow to convert ordered
-#   arguments into named parameters
-#
-#       Arg 1: Report ID
-#       Arg 2: Google Storage data/report root path directory (cannot just be a bucket, it must be a subdirectory within a bucket) 
-#               eg: "gs://bucket1/nemascan/reports"
-#       Arg 3: Google Storage work root path directory (cannot just be a bucket, it must be a subdirectory within a bucket) 
-#               eg: "gs://bucket2/workdir"
-#
-#
-#   example: 'nemarun.sh d37a6511ac5170d3bf7d31d17ba872e0 gs://elegansvariation.org/reports/nemascan gs://nf-pipelines/workdir'
+# This script acts as a wrapper around the execution of Nextflow to convert environment variables
+#    into named parameters
 #   result: nextflow run gcp.nf 
 #                   -profile gcp 
 #                   --trait_file gs://elegansvariation.org/reports/nemascan/d37a6511ac5170d3bf7d31d17ba872e0/data.tsv 
@@ -18,4 +9,23 @@
 #                   --workDir gs://nf-pipelines/workdir/d37a6511ac5170d3bf7d31d17ba872e0
 #   
 #
-nextflow run gcp.nf -profile gcp --trait_file ${2}/${1}/data.tsv --out ${2}/${1}/results --workDir ${3}/${1}
+if [[ -z "${TRAIT_FILE}" ]]; then
+  echo "TRAIT_FILE environment variable must be set to the Google Storage path of the data"
+  exit 1
+fi
+
+if [[ -z "${OUTPUT_DIR}" ]]; then
+  echo "OUTPUT_DIR environment variable must be set to the Google Storage path of the data"
+  exit 1
+fi
+
+
+if [[ -z "${WORK_DIR}" ]]; then
+  echo "OUTPUT_DIR environment variable must be set to the Google Storage path of the data"
+  exit 1
+fi
+
+
+cd /nemarun/
+nextflow run gcp.nf -profile gcp --trait_file ${TRAIT_FILE} --out ${OUTPUT_DIR} --workDir ${WORK_DIR}
+
