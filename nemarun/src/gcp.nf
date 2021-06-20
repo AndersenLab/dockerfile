@@ -699,7 +699,7 @@ process gcta_lmm_exact_mapping {
 
 process gcta_intervals_maps {
 
-    machineType 'n1-highmem-8'
+    machineType 'n2-highmem-8'
 
     publishDir "${params.out}/Mapping/Processed", mode: 'copy', pattern: "*AGGREGATE_mapping.tsv"
     publishDir "${params.out}/Mapping/Processed", mode: 'copy', pattern: "*AGGREGATE_qtl_region.tsv" //would be nice to put all these files per trait into one file
@@ -970,7 +970,7 @@ process html_report_main {
   //executor 'local'
   tag {"${TRAIT} - HTML REPORT" }
 
-  machineType 'n1-highmem-2'
+  machineType 'n2-highmem-4'
 
   publishDir "${params.out}/Reports", pattern: "*.Rmd", overwrite: true
   publishDir "${params.out}/Reports", pattern: "*.html", overwrite: true
