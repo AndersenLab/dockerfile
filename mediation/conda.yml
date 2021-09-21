@@ -1,0 +1,16 @@
+name: mediation1
+channels:
+  - defaults
+  - bioconda
+  - r
+  - biobuilds
+  - conda-forge
+  - brown-data-science
+dependencies:
+  - r=3.6.0
+  #- r-data.table
+  - r-dplyr
+  - r-tidyr
+  - r-ggplot2
+  - r-mediation
+ # - bioconductor-multimed
