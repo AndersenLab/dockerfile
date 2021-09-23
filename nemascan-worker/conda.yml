@@ -1,4 +1,4 @@
-name: nemascan
+name: nemascan-worker
 channels:
   - defaults
   - bioconda
@@ -29,4 +29,5 @@ dependencies:
   - r-Rcpp=1.0.1
   - r-cowplot=1.0.0
   - mscorefonts
+  - r-systemfonts
 #  - bioconductor-ComplexHeatmap=2.4.2
