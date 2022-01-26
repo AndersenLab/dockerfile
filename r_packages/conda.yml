@@ -8,18 +8,17 @@ channels:
 dependencies:
   - pandoc=2.12
   - r=3.6.0
-  - r-dplyr=0.8.4
-  - r-stringr=1.4.0
-  - r-tidyr=1.0.2
-  - r-ggplot2=3.3.3
-  - r-data.table=1.12.8
-  - r-DT=0.12
-  - r-knitr=1.28
-  - r-rmarkdown=2.1
-  - r-plotly=4.9.2
-  - r-cowplot=1.0.0
-  - r-ggupset=0.3.0
+  - mscorefonts
+  - r-data.table
+  - r-DT
+  - r-knitr
+  - r-rmarkdown
+  - r-plotly
+  - r-cowplot
+  - r-ggupset
   - r-patchwork
-  - r-magrittr
   - r-gsheet
-  - r-readr
+  - r-BiocManager
+  - r-igraph
+  - r-ape
+  - r-fuzzyjoin
